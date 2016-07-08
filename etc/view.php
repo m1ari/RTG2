@@ -11,10 +11,9 @@
   print "<HTML>\n<!-- RTG2 Version $VERSION -->\n<HEAD>\n";
 
   /* Connect to RTG MySQL Database */
-  $dbc=@mysql_connect ($host, $user, $pass) or
-  $dbc=@mysql_connect ("$host:/var/lib/mysql/mysql.sock", $user, $pass) or 
+  $dbc=@new mysqli($host, $user, $pass, $db) or
+  $dbc=@new mysqli("$host:/var/lib/mysql/mysql.sock", $user, $pass, $db) or 
      die ("MySQL Connection Failed, Check Configuration.");
-  mysql_select_db($db,$dbc);
 
   # Global variables off by default in newer versions of PHP
   if (!$PHP_SELF) {
@@ -26,17 +25,17 @@
   # Determine router, interface names as necessary
   if ($rid && $iid) {
     $selectQuery="SELECT a.name, a.description, a.speed, b.name AS router FROM interface a, router b WHERE a.rid=b.rid AND a.rid=$rid AND a.id=$iid";
-    $selectResult=mysql_query($selectQuery, $dbc);
-    $selectRow=mysql_fetch_object($selectResult);
-    $interfaces = mysql_num_rows($selectResult);
+    $selectResult=$dbc->query($selectQuery);
+    $selectRow=$selectResult->fetch_object();
+    $interfaces = $selectResult->num_rows;
     $name = $selectRow->name;
     $description = $selectRow->description;
     $speed = ($selectRow->speed)/1000000;
     $router = $selectRow->router;
   } else if ($rid && !$iid) {
     $selectQuery="SELECT name AS router from router where rid=$rid";
-    $selectResult=mysql_query($selectQuery, $dbc);
-    $selectRow=mysql_fetch_object($selectResult);
+    $selectResult=$dbc->query($selectQuery);
+    $selectRow=$selectResult->fetch_object();
     $router = $selectRow->router;
   }
 
@@ -68,12 +67,12 @@
  if (!$rid) {
     print "Monitored Devices: <P>\n";
     $selectQuery="SELECT rid, name FROM router";
-    $selectResult=mysql_query($selectQuery, $dbc);
-    if (mysql_num_rows($selectResult) <= 0) 
+    $selectResult=$dbc->query($selectQuery);
+    if ($selectResult->num_rows <= 0) 
       print "<BR>No Routers Found.<BR>\n";
     else {
       print "<UL>\n";
-      while ($selectRow=mysql_fetch_object($selectResult)){
+      while ($selectRow=$selectResult->fetch_object()){
         print "<LI><A HREF=\"$PHP_SELF?rid=$selectRow->rid\">";
         print "$selectRow->name</A><BR>\n";
       }
@@ -116,8 +115,8 @@
 
  if ($rid && !$iid) {
     $selectQuery="SELECT id, name, description FROM interface WHERE rid=$rid";
-    $selectResult=mysql_query($selectQuery, $dbc);
-    $interfaces = mysql_num_rows($selectResult);
+    $selectResult=$dbc->query($selectQuery);
+    $interfaces = $selectResult->num_rows;
     if ($interfaces <= 0) 
       print "<BR>No Interfaces Found for Router $router (ID: $rid).<BR>\n";
     else {
@@ -129,7 +128,7 @@
       print gmdate('D, d M Y H:i:s \G\M\T', time())."\n";
       print "</TABLE><HR>\n";
       print "<TABLE BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"10\">\n";
-      while ($selectRow=mysql_fetch_object($selectResult)){
+      while ($selectRow=$selectResult->fetch_object()){
         $ids[$selectRow->id] = $selectRow->name; 
 	$desc[$selectRow->id] = $selectRow->description;
 	$iid = $selectRow->id;
@@ -148,7 +147,7 @@
     print "<INPUT TYPE=\"SUBMIT\" VALUE=\"Back to Main\">\n";
   }
 
-  if ($dbc) mysql_close($dbc);
+  if ($dbc) $dbc->close();
   echo "</FORM>\n";
 ?>
 
