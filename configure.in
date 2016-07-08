@@ -254,17 +254,17 @@ done
 if test -d "$MYSQL_LIB_DIR"; then
   AC_DEFINE(HAVE_MYSQL, 1, [Whether you have MySQL])
 else
-  AC_MSG_WARN(Cannot find thread-safe MySQL library (libmysqlclient_r))
+  AC_MSG_WARN(Cannot find thread-safe MySQL library (libmysqlclient))
 fi
 
 DBD_DRIVER="mysql"
 LDFLAGS="-L$MYSQL_LIB_DIR $LDFLAGS"
 CPPFLAGS="$CPPFLAGS -I$MYSQL_INC_DIR"
 
-AC_CHECK_LIB(mysqlclient_r, my_thread_init,
-       [ LIBS="-lmysqlclient_r $LIBS"
+AC_CHECK_LIB(mysqlclient, mysql_thread_init,
+       [ LIBS="-lmysqlclient $LIBS"
        ltlibraries="librtgmysql.la $ltlibraries" ],
-       AC_MSG_WARN(Cannot link with thread-safe MySQL lib (libmysqlclient_r)))
+       AC_MSG_WARN(Cannot link with thread-safe MySQL lib (libmysqlclient)))
 dnl ****************** End MySQL checking ***********************
 dnl fi
 
