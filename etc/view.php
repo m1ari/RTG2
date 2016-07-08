@@ -95,19 +95,19 @@
 
       $bt = $et - (60*60*24);
       print "<B>Day View:</B><BR>\n";
-      print "<IMG SRC=\"rtgplot.cgi?t1=ifInOctets_".$rid."&t2=ifOutOctets_".$rid."&iid=$iid&begin=$bt&end=$et&units=bits/s&factor=8&filled=yes\">\n";
+      print "<IMG SRC=\"rtgplot.cgi?DO=1:ifInOctets_".$rid.":".$iid."&DO=2:ifOutOctets_".$rid.":".$iid."&LO=1:1:factor=8:In&LO=2:2:factor=8:Out&PO=".$router."-".$name.":500:150::".$bt.":".$et."\">\n";
       print "<BR><B>$router: $name ($description)</B>\n";
       print "<BR><HR>\n";
 
       $bt = $et - (60*60*24*7);
       print "<B>Week View:</B><BR>\n";
-      print "<IMG SRC=\"rtgplot.cgi?t1=ifInOctets_".$rid."&t2=ifOutOctets_".$rid."&iid=$iid&begin=$bt&end=$et&units=bits/s&factor=8&filled=yes\">\n";
+      print "<IMG SRC=\"rtgplot.cgi?DO=1:ifInOctets_".$rid.":".$iid."&DO=2:ifOutOctets_".$rid.":".$iid."&LO=1:1:factor=8:In&LO=2:2:factor=8:Out&PO=".$router."-".$name.":500:150::".$bt.":".$et."\">\n";
       print "<BR><B>$router: $name ($description)</B>\n";
       print "<BR><HR>\n";
 
       $bt = $et - (60*60*24*30);
       print "<B>Month View:</B><BR>\n";
-      print "<IMG SRC=\"rtgplot.cgi?t1=ifInOctets_".$rid."&t2=ifOutOctets_".$rid."&iid=$iid&begin=$bt&end=$et&units=bits/s&factor=8&filled=yes\">\n";
+      print "<IMG SRC=\"rtgplot.cgi?DO=1:ifInOctets_".$rid.":".$iid."&DO=2:ifOutOctets_".$rid.":".$iid."&LO=1:1:factor=8:In&LO=2:2:factor=8:Out&PO=".$router."-".$name.":500:150::".$bt.":".$et."\">\n";
       print "<BR><B>$router: $name ($description)</B>\n";
       print "<BR><BR>\n";
     }
@@ -134,7 +134,7 @@
 	$desc[$selectRow->id] = $selectRow->description;
 	$iid = $selectRow->id;
 	print "<TD><A HREF=\"$PHP_SELF?rid=$rid&iid=$iid\">\n";
-	print "<IMG HEIGHT=\"135\" WIDTH=\"500\" SRC=\"rtgplot.cgi?t1=ifInOctets_".$rid."&t2=ifOutOctets_".$rid."&iid=$iid&begin=$bt&end=$et&units=bits/s&factor=8&filled=yes\" BORDER=\"0\">\n";
+        print "<IMG SRC=\"rtgplot.cgi?DO=1:ifInOctets_".$rid.":".$iid."&DO=2:ifOutOctets_".$rid.":".$iid."&LO=1:1:factor=8:In&LO=2:2:factor=8:Out&PO=".$router."-".$name.":500:150::".$bt.":".$et."\">\n";
 	print "</A><BR>\n";
         print "<B>$selectRow->name ($selectRow->description)</B>\n";
         if ($even) {
