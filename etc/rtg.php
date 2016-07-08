@@ -8,10 +8,9 @@
     $dbc=pg_connect("host=$host user=$user password=$pass dbname=$db") or
        die ("PGSQL Connection Failed, Check Configuration.");
  } else {
-    $dbc=@mysql_connect ($host, $user, $pass) or
-    $dbc=@mysql_connect ("$host:/var/lib/mysql/mysql.sock", $user, $pass) or 
+    $dbc=@new mysqli($host, $user, $pass, $db) or
+    $dbc=@new mysqli("$host:/var/lib/mysql/mysql.sock", $user, $pass, $db) or
        die ("MySQL Connection Failed, Check Configuration.");
-    mysql_select_db($db,$dbc);
  }
 
  if ($PHP_SELF == "") {
@@ -86,7 +85,7 @@ function output_plot($rid, $typein, $typeout, $title, $iid, $xplot, $yplot, $bt,
    if ($pgsql) 
      return (pg_query($dbc, $q));
    else 
-     return (mysql_query($q, $dbc));
+     return ($dbc->query($q));
  }
 
  # Fetch wrapper
@@ -94,7 +93,7 @@ function output_plot($rid, $typein, $typeout, $title, $iid, $xplot, $yplot, $bt,
    if ($pgsql)
      return (pg_fetch_object($r));
    else
-     return (mysql_fetch_object($r));
+     return ($r->fetch_object());
  }
 
  # Num rows wrapper
@@ -102,7 +101,7 @@ function output_plot($rid, $typein, $typeout, $title, $iid, $xplot, $yplot, $bt,
    if ($pgsql)
      return (pg_num_rows($r));
    else
-     return (mysql_num_rows($r));
+     return ($r->num_rows);
  }
 
   # Determine router, interface names as necessary
@@ -271,7 +270,7 @@ if (($bt || $smonth) && $iid) {
 if ($pgsql) 
   pg_close($dbc);
 else
-  mysql_close($dbc);
+  $dbc->close();
 ?>
 
 <BR>
