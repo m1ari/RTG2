@@ -150,9 +150,9 @@ int main(int argc, char **argv) {
 
 	/* Initialize plot */
 	PO = (plot_obj_t *) malloc(sizeof(plot_obj_t));
-	bzero(PO, sizeof(plot_obj_t));
+        memset(PO, 0, sizeof(plot_obj_t));
 	sizeDefaults(PO);
-	bzero(&arguments, sizeof(arguments_t));
+	memset(&arguments, 0, sizeof(arguments_t));
 	config_defaults(set);
 
 	/* Called via a CGI */
