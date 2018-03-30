@@ -149,7 +149,8 @@ int main(int argc, char **argv) {
 	dfp = stderr;
 
 	/* Initialize plot */
-	PO = (plot_obj_t *) calloc(sizeof(plot_obj_t));
+	PO = (plot_obj_t *) malloc(sizeof(plot_obj_t));
+        memset(PO, 0, sizeof(plot_obj_t));
 	sizeDefaults(PO);
 	memset(&arguments, 0, sizeof(arguments_t));
 	config_defaults(set);

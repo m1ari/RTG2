@@ -51,9 +51,11 @@ data_obj_t *parseDO(char *string) {
     char *c;
     char *res;
 
-    DO = (data_obj_t *) calloc(sizeof(data_obj_t));
+    DO = (data_obj_t *) malloc(sizeof(data_obj_t));
+    memset(DO, 0, sizeof(data_obj_t));
 	// XXX - REB - fixed static malloc
-	DO->table = (char *) calloc(64*sizeof(char));
+	DO->table = (char *) malloc(64*sizeof(char));
+    memset(DO->table, 0, 64*sizeof(char));
     c = string;
     c = getField(c, ':', &res);
     if (!c) plotbail("Bad Data Object Input!\n");
@@ -146,7 +148,8 @@ void parseLODO(char *string, line_obj_t **LOptr) {
         DOindex = atoi(res);
 
         /* Create a data object list (DOL) element */
-        DOL = (data_obj_list_t *) calloc(sizeof(data_obj_list_t));
+        DOL = (data_obj_list_t *) malloc(sizeof(data_obj_list_t));
+        memset(DOL, 0, sizeof(data_obj_list_t));
         DOL->DO = DOs[DOindex];
         if (DOL->DO == NULL)
             plotbail("No such Data Object for given Line Object!");
@@ -171,8 +174,10 @@ line_obj_t *parseLO(char *string) {
     char *res;
     int lengendLen = 0;
 
-    LO = (line_obj_t *) calloc(sizeof(line_obj_t));
-	LO->label = (char *) calloc(LEGEND_MAX_LEN * sizeof(char));
+    LO = (line_obj_t *) malloc(sizeof(line_obj_t));
+    memset(LO, 0, sizeof(line_obj_t));
+	LO->label = (char *) malloc(LEGEND_MAX_LEN * sizeof(char));
+    memset(LO->label, 0, LEGEND_MAX_LEN * sizeof(char));
     LO->DO_list = NULL;
 
     c = string;
