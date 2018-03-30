@@ -351,6 +351,8 @@ void *poller(void *thread_args)
 			} /* insert_val > 0 or withzeros */	
 		} /* !dboff */
 
+        if (response != NULL) snmp_free_pdu(response);
+
 	} /* STAT_SUCCESS */
 
 /*	debug(HIGH, "Thread [%d] doing commit\n", worker->index);
@@ -358,7 +360,6 @@ void *poller(void *thread_args)
 
         if (sessp != NULL) {
            snmp_sess_close(sessp);
-           if (response != NULL) snmp_free_pdu(response);
         }
 
 	debug(DEVELOP, "Thread [%d] locking (update work_count)\n", worker->index);
